@@ -20,6 +20,7 @@
     "format": "prettier entrypoints/ locales/ styles/ types/ utils/ --write -u"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "@vicons/antd": "^0.13.0",
     "@vicons/fa": "^0.13.0",
     "@vicons/fluent": "^0.13.0",

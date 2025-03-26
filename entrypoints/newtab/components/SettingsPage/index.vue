@@ -6,8 +6,6 @@ import { CloseRound } from '@vicons/material'
 import type { ScrollbarInstance } from 'element-plus'
 
 import BackgroundSettings from './Settings/BackgroundSettings.vue'
-import MoreAbout from './Settings/MoreAbout.vue'
-import OtherSettings from './Settings/OtherSettings.vue'
 import SearchSettings from './Settings/SearchSettings.vue'
 import ThemeSettings from './Settings/ThemeSettings.vue'
 import { i18n } from '@/.wxt/i18n'
@@ -73,8 +71,6 @@ defineExpose({ show, hide, toggleShow })
         <theme-settings />
         <search-settings />
         <background-settings />
-        <other-settings />
-        <more-about />
         <div style="height: 35px"></div>
       </el-scrollbar>
     </div>
