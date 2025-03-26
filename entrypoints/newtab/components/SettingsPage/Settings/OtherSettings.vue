@@ -49,10 +49,6 @@ async function clearExtensionData() {
   </div>
   <div class="setting-items-container">
     <div class="settings-item horizontal">
-      <div class="settings-label">{{ i18n.t('newtab.settings.other.yiyan') }}</div>
-      <el-switch v-model="settingsStore.search.enableYiyan" />
-    </div>
-    <div class="settings-item horizontal">
       <div class="settings-label">{{ i18n.t('newtab.settings.other.purgeData') }}</div>
       <el-button
         type="danger"

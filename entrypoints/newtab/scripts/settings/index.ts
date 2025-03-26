@@ -10,7 +10,7 @@ export const defaultSettings: SettingsInterfaceVer3 = {
   primaryColor: '#FFBB00',
   time: {
     isMeridiem: false,
-    showMeridiem: true,
+    showMeridiem: false,
     showDate: true,
     showLunar: true,
     enableShadow: true,
@@ -20,7 +20,7 @@ export const defaultSettings: SettingsInterfaceVer3 = {
     }
   },
   search: {
-    autoFocus: false,
+    autoFocus: true,
     selectedSearchSuggestionAPI: 'bing',
     selectedSearchEngine: 2,
     searchInNewTab: false,
@@ -46,8 +46,8 @@ export const defaultSettings: SettingsInterfaceVer3 = {
     updateDate: ''
   },
   quickStart: {
-    enabled: true,
-    enableTopSites: true,
+    enabled: false,
+    enableTopSites: false,
     enableShadow: true,
     rows: 2,
     columns: 5,

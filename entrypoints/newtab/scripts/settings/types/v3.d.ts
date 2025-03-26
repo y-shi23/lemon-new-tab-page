@@ -14,7 +14,6 @@ export interface SettingsInterfaceVer3 {
     }
   }
   search: {
-    autoFocus: boolean
     selectedSearchSuggestionAPI: string
     selectedSearchEngine: number
     searchInNewTab: boolean

@@ -6,12 +6,10 @@ import { CloseRound } from '@vicons/material'
 import type { ScrollbarInstance } from 'element-plus'
 
 import BackgroundSettings from './Settings/BackgroundSettings.vue'
-import ClockSettings from './Settings/ClockSettings.vue'
 import MoreAbout from './Settings/MoreAbout.vue'
 import OtherSettings from './Settings/OtherSettings.vue'
 import SearchSettings from './Settings/SearchSettings.vue'
 import ThemeSettings from './Settings/ThemeSettings.vue'
-import QuickstartSettings from './Settings/QuickstartSettings.vue'
 import { i18n } from '@/.wxt/i18n'
 
 const opened = ref(false)
@@ -73,10 +71,8 @@ defineExpose({ show, hide, toggleShow })
           {{ i18n.t('newtab.settings.title') }}
         </div>
         <theme-settings />
-        <clock-settings />
         <search-settings />
         <background-settings />
-        <quickstart-settings />
         <other-settings />
         <more-about />
         <div style="height: 35px"></div>

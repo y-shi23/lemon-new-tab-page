@@ -12,10 +12,9 @@ import Changelog from './components/Changelog.vue'
 import QuickStart from './components/QuickStart/index.vue'
 import SearchBox from './components/SearchBox/index.vue'
 import SettingsPage from './components/SettingsPage/index.vue'
-import TimeNow from './components/TimeNow.vue'
 import YiYan from './components/YiYan.vue'
+import TimeNow from './components/TimeNow.vue'
 
-import { getBingWallpaperURL } from './scripts/api/bingWallpaper'
 import { verifyImageUrl } from './scripts/img'
 import { reloadBackgroundImage, useSettingsStore, useBgSwtichStore } from './scripts/store'
 import { BgType } from './scripts/settings'
@@ -42,19 +41,9 @@ async function loadLocalBackground() {
 }
 
 onMounted(async () => {
-  if (settingsStore.pluginVersion !== version) {
-    ChangelogRef.value?.show()
-  }
-
   switch (settingsStore.background.bgType) {
-    case BgType.Bing:
-      bgURL.value = `url(${await getBingWallpaperURL()})`
-      break
     case BgType.Local:
       await loadLocalBackground()
-      break
-    case BgType.Online:
-      bgURL.value = `url(${settingsStore.background.onlineUrl})`
       break
   }
 
@@ -65,17 +54,11 @@ onMounted(async () => {
       await promiseTimeout(300)
       bgURL.value = ''
       switch (settingsStore.background.bgType) {
-        case BgType.Bing:
-          bgURL.value = `url(${await getBingWallpaperURL()})`
-          break
         case BgType.Local:
           await loadLocalBackground()
           break
         case BgType.None:
           bgURL.value = ''
-          break
-        case BgType.Online:
-          bgURL.value = `url(${settingsStore.background.onlineUrl})`
           break
       }
       switchStore.end()
@@ -91,16 +74,6 @@ onMounted(async () => {
       switchStore.end()
     }
   )
-
-  watch(
-    () => settingsStore.background.onlineUrl,
-    async () => {
-      switchStore.start()
-      await promiseTimeout(500)
-      bgURL.value = `url(${settingsStore.background.onlineUrl})`
-      switchStore.end()
-    }
-  )
 })
 </script>
 
@@ -113,9 +86,8 @@ onMounted(async () => {
       }"
     >
       <time-now />
-      <search-box style="margin-top: 10px" />
-      <quick-start v-if="settingsStore.quickStart.enabled" />
       <yi-yan />
+      <search-box style="margin-top: 10px" />
     </main>
     <background :url="bgURL" />
     <div

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import { PictureOutlined } from '@vicons/antd'
 import { Plus } from '@vicons/fa'
-import { type UploadProps, type UploadRequestOptions, type ElInput } from 'element-plus'
+import { type UploadProps, type UploadRequestOptions } from 'element-plus'
 
 import { i18n } from '@/.wxt/i18n'
 import { isImageFile } from '@/newtab/scripts/img'
@@ -10,15 +9,6 @@ import { uploadBackgroundImage, useSettingsStore } from '@/newtab/scripts/store'
 import { BgType } from '@/newtab/scripts/settings'
 
 const settingsStore = useSettingsStore()
-const isChrome = import.meta.env.CHROME || import.meta.env.EDGE
-const tmpUrl = ref('')
-const onlineUrlInput = ref<InstanceType<typeof ElInput>>()
-
-onMounted(() => {
-  if (settingsStore.background.onlineUrl) {
-    tmpUrl.value = settingsStore.background.onlineUrl
-  }
-})
 
 const beforeBackgroundUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (!isImageFile(rawFile)) {
@@ -26,65 +16,6 @@ const beforeBackgroundUpload: UploadProps['beforeUpload'] = (rawFile) => {
     return false
   }
   return true
-}
-
-function handlePermissions(_url: string, hostname: string) {
-  const permissions = { origins: [`*://${hostname}/*`] }
-  chrome.permissions.contains(permissions, (granted) => {
-    if (granted) {
-      settingsStore.background.onlineUrl = _url
-      return
-    }
-    ElMessageBox.confirm(i18n.t('newtab.settings.background.warning.securityPolicy', [hostname]))
-      .then(() => {
-        chrome.permissions.request(permissions, (granted) => {
-          if (granted) {
-            ElMessage.success(i18n.t('newtab.settings.background.warning.granted'))
-            settingsStore.background.onlineUrl = _url
-            return
-          }
-          ElMessage.error(i18n.t('newtab.settings.background.warning.notGranted'))
-          settingsStore.background.bgType = BgType.None
-          tmpUrl.value = ''
-        })
-      })
-      .catch(() => {
-        settingsStore.background.bgType = BgType.None
-        tmpUrl.value = ''
-      })
-  })
-}
-
-function changeOnlineBg(e: Event) {
-  onlineUrlInput.value?.blur()
-  const _url = (e.target as HTMLInputElement).value
-  if (!_url) {
-    settingsStore.background.bgType = BgType.None
-    settingsStore.background.onlineUrl = ''
-    tmpUrl.value = ''
-    return
-  }
-  const hostname = new URL(_url).hostname
-
-  if (!isChrome) {
-    settingsStore.background.onlineUrl = _url
-    return
-  }
-
-  handlePermissions(_url, hostname)
-}
-
-function onlineImageWarn() {
-  if (settingsStore.background.onlineUrl) return
-  ElMessageBox.confirm(
-    i18n.t('newtab.settings.background.warning.unknownSource'),
-    i18n.t('newtab.settings.background.warning.title'),
-    {
-      type: 'warning'
-    }
-  ).catch(() => {
-    settingsStore.background.bgType = BgType.None
-  })
 }
 </script>
 
@@ -97,34 +28,10 @@ function onlineImageWarn() {
     <div class="settings-item">
       <div class="settings-label">{{ i18n.t('newtab.settings.background.type.title') }}</div>
       <el-radio-group v-model="settingsStore.background.bgType">
-        <el-radio :value="BgType.None">{{
-          i18n.t('newtab.settings.background.type.none')
-        }}</el-radio>
-        <el-radio :value="BgType.Local">{{
-          i18n.t('newtab.settings.background.type.local')
-        }}</el-radio>
-        <el-radio :value="BgType.Bing">{{
-          i18n.t('newtab.settings.background.type.bing')
-        }}</el-radio>
-        <el-radio :value="BgType.Online" @change="onlineImageWarn">{{
-          i18n.t('newtab.settings.background.type.online')
-        }}</el-radio>
+        <el-radio :value="BgType.None">{{ i18n.t('newtab.settings.background.type.none') }}</el-radio>
+        <el-radio :value="BgType.Local">{{ i18n.t('newtab.settings.background.type.local') }}</el-radio>
       </el-radio-group>
     </div>
-    <el-input
-      v-if="settingsStore.background.bgType === BgType.Online"
-      ref="onlineUrlInput"
-      v-model="tmpUrl"
-      @blur="changeOnlineBg"
-      @keydown.enter="changeOnlineBg"
-      placeholder="https://example.com/image.jpg"
-    ></el-input>
-    <ul v-if="settingsStore.background.bgType === BgType.Online" class="online-bg-tips">
-      <li>{{ i18n.t('newtab.settings.background.onlineTips.a') }}</li>
-      <li>{{ i18n.t('newtab.settings.background.onlineTips.b') }}</li>
-      <li>{{ i18n.t('newtab.settings.background.onlineTips.c') }}</li>
-      <li>{{ i18n.t('newtab.settings.background.onlineTips.d') }}</li>
-    </ul>
     <el-upload
       v-if="settingsStore.background.bgType === BgType.Local"
       class="bg-uploader"
@@ -209,17 +116,6 @@ function onlineImageWarn() {
   .el-color-picker__color {
     border: none;
     border-radius: none;
-  }
-}
-
-.online-bg-tips {
-  font-size: 12px;
-  margin-top: 5px;
-  color: var(--el-text-color-placeholder);
-  padding: 5px 15px 0;
-
-  li {
-    margin: 3px 0;
   }
 }
 </style>

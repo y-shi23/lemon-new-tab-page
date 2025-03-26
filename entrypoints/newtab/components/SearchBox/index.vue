@@ -151,10 +151,8 @@ async function doSearchWithText(text: string) {
 }
 
 onMounted(() => {
-  if (settingsStore.search.autoFocus) {
-    handleFocus()
-    searchInput.value?.focus()
-  }
+  handleFocus()
+  searchInput.value?.focus()
   useTimeoutFn(() => (mounted.value = true), 100)
 })
 </script>
@@ -183,7 +181,7 @@ onMounted(() => {
         @keydown.down.prevent="handleDown"
         @keydown.tab.shift.prevent.exact="handlePrevTab"
         @keydown.tab.prevent.exact="handleNextTab"
-        :autofocus="settingsStore.search.autoFocus"
+        autofocus
       />
       <div class="search-btn">
         <el-icon @click="doSearch"><search /></el-icon>
